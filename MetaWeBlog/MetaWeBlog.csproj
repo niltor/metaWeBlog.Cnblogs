@@ -3,6 +3,20 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>MSDev.MetaWeBlog</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>MSDev.MetaWeBlog</PackageId>
+    <Authors>MSDev_NilTor</Authors>
+    <Description>Cnblogs MetaWeBlog，博客园博客同步迁移库。
+可通过该类库管理博客园中的博客。或完成相关同步或迁移的功能。</Description>
+    <PackageProjectUrl>https://github.com/niltor/metaWeBlog.Cnblogs</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/niltor/metaWeBlog.Cnblogs</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/niltor/metaWeBlog.Cnblogs/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>metaweblog,cnblogs</PackageTags>
+    <PackageReleaseNotes>Cnblogs MetaWeBlog，博客园博客同步迁移库。
+可通过该类库管理博客园中的博客。或完成相关同步或迁移的功能。</PackageReleaseNotes>
+    <Version>0.1.0</Version>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
 </Project>
