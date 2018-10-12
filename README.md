@@ -4,9 +4,15 @@ Cnblogs MetaWeBlog，博客园博客同步迁移库。
 
 可通过该类库管理博客园中的博客。或完成相关同步或迁移的功能。
 
+项目内容基于 MetaWeblogSharp  修改而成。
+
 ## 注意事项
 
 博客园新增博客间隔最少30秒。
+
+## 安装
+
+ [![NuGet](https://img.shields.io/nuget/v/MSDev.MetaWeBlog.svg?style=flat-square&label=nuget)](https://www.nuget.org/packages/MSDev.MetaWeBlog/)
 
 ## 使用示例
 
