@@ -316,6 +316,43 @@ namespace Ater.MetaWeBlog
             return items;
         }
 
+        /// <summary>
+        /// 添加分类
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="parent_id"></param>
+        /// <param name="description"></param>
+        /// <param name="slug"></param>
+        /// <returns></returns>
+        public int NewCatalog(string name, int parent_id, string description = null, string slug = null)
+        {
+            Service service = new Service(clientOption.MetaWeblogURL);
+
+            Struct struct_ = new Struct();
+            struct_["name"] = new StringValue(name);
+            struct_["parent_id"] = new IntegerValue(parent_id);
+
+            if (slug != null)
+                struct_["slug"] = new StringValue(slug);
+
+            if (description != null)
+                struct_["description"] = new StringValue(description);
+
+            MethodCall method = new MethodCall("wp.newCategory");
+            method.Parameters.Add(clientOption.BlogID);
+            method.Parameters.Add(clientOption.Username);
+            method.Parameters.Add(clientOption.Password);
+            method.Parameters.Add(struct_);
+
+            service.Cookies = clientOption.Cookies;
+
+            MethodResponse response = service.Execute(method);
+
+            Value param = response.Parameters[0];
+            var success = (IntegerValue)param;
+            return success.Integer;
+        }
+
         public UserInfo GetUserInfo()
         {
             Service service = new Service(clientOption.MetaWeblogURL);

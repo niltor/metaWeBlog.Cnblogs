@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MetaWeBlog\MetaWeBlog.csproj" />
+    <ProjectReference Include="..\MetaWeBlog\MetaWeblog.csproj" />
   </ItemGroup>
 
 </Project>
