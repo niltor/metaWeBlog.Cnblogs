@@ -1,4 +1,4 @@
-namespace MSDev.MetaWeblog.Models
+namespace Ater.MetaWeBlog.Models
 {
     public class MediaObjectInfo
     {

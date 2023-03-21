@@ -1,6 +1,6 @@
 using System;
 
-namespace MSDev.MetaWeblog.XmlRPC
+namespace Ater.MetaWeBlog.XmlRPC
 {
     [Serializable]
     public class XmlRPCException : Exception

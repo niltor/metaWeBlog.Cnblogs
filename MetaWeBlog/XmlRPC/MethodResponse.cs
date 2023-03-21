@@ -1,28 +1,27 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MSDev.MetaWeblog.XmlRPC
+namespace Ater.MetaWeBlog.XmlRPC
 {
     public class MethodResponse
     {
         public ParameterList Parameters { get; private set; }
-        
+
         public MethodResponse(string content)
         {
-            this.Parameters = new ParameterList();
+            Parameters = new ParameterList();
 
-            var lo = new System.Xml.Linq.LoadOptions();
+            System.Xml.Linq.LoadOptions lo = new System.Xml.Linq.LoadOptions();
 
-            var doc = System.Xml.Linq.XDocument.Parse(content,lo);
-            var root = doc.Root;
-            var fault_el = root.Element("fault");
+            System.Xml.Linq.XDocument doc = System.Xml.Linq.XDocument.Parse(content, lo);
+            System.Xml.Linq.XElement root = doc.Root;
+            System.Xml.Linq.XElement fault_el = root.Element("fault");
             if (fault_el != null)
             {
-                var f = Fault.ParseXml(fault_el);
+                Fault f = Fault.ParseXml(fault_el);
 
                 string msg = string.Format("XMLRPC FAULT [{0}]: \"{1}\"", f.FaultCode, f.FaultString);
-                var exc = new XmlRPCException(msg)
+                XmlRPCException exc = new XmlRPCException(msg)
                 {
                     Fault = f
                 };
@@ -30,15 +29,15 @@ namespace MSDev.MetaWeblog.XmlRPC
                 throw exc;
             }
 
-            var params_el = root.GetElement("params");
-            var param_els = params_el.Elements("param").ToList();
+            System.Xml.Linq.XElement params_el = root.GetElement("params");
+            List<System.Xml.Linq.XElement> param_els = params_el.Elements("param").ToList();
 
-            foreach (var param_el in param_els)
+            foreach (System.Xml.Linq.XElement param_el in param_els)
             {
-                var value_el = param_el.GetElement("value");
+                System.Xml.Linq.XElement value_el = param_el.GetElement("value");
 
-                var val = XmlRPC.Value.ParseXml(value_el);
-                this.Parameters.Add( val );
+                Value val = XmlRPC.Value.ParseXml(value_el);
+                Parameters.Add(val);
             }
         }
     }

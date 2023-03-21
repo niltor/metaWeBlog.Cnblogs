@@ -1,4 +1,4 @@
-namespace MSDev.MetaWeblog
+namespace Ater.MetaWeBlog
 {
     [System.Serializable]
     public class MetaWeblogException : System.Exception

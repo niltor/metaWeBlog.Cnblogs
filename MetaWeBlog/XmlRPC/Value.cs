@@ -1,8 +1,7 @@
-using System;
 using System.Linq;
-using SXL=System.Xml.Linq;
+using SXL = System.Xml.Linq;
 
-namespace MSDev.MetaWeblog.XmlRPC
+namespace Ater.MetaWeBlog.XmlRPC
 {
     public abstract class Value
     {
@@ -13,14 +12,14 @@ namespace MSDev.MetaWeblog.XmlRPC
         {
             if (value_el.Name != "value")
             {
-                string msg = string.Format("XML Element should have name \"value\" instead found \"{0}\"", value_el.Name);
+                _ = string.Format("XML Element should have name \"value\" instead found \"{0}\"", value_el.Name);
                 throw new XmlRPCException();
             }
 
-            var input_value = value_el.Value;
+            string input_value = value_el.Value;
             if (value_el.HasElements)
             {
-                var type_el = value_el.Elements().First();
+                SXL.XElement type_el = value_el.Elements().First();
 
                 string typename = type_el.Name.ToString();
                 if (typename == Array.TypeString)
@@ -51,7 +50,7 @@ namespace MSDev.MetaWeblog.XmlRPC
                 {
                     return IntegerValue.XmlToValue(type_el);
                 }
-                else if (typename == BooleanValue.TypeString )
+                else if (typename == BooleanValue.TypeString)
                 {
                     return BooleanValue.XmlToValue(type_el);
                 }
@@ -70,11 +69,11 @@ namespace MSDev.MetaWeblog.XmlRPC
 
         public SXL.XElement AddXmlElement(SXL.XElement parent)
         {
-            var value_el = new SXL.XElement("value");
-            var type_el = new SXL.XElement(this.GetTypeString());
+            SXL.XElement value_el = new SXL.XElement("value");
+            SXL.XElement type_el = new SXL.XElement(GetTypeString());
             value_el.Add(type_el);
 
-            this.AddToTypeEl(type_el);
+            AddToTypeEl(type_el);
 
             parent.Add(value_el);
 

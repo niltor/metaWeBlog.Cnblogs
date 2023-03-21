@@ -1,6 +1,4 @@
-using MSDev.MetaWeblog;
-
-namespace MSDev.MetaWeBlog.Options
+namespace Ater.MetaWeBlog.Options
 {
     /// <summary>
     /// 博客园配置

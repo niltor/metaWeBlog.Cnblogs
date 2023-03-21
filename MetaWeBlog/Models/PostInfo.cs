@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MSDev.MetaWeblog.Models
+namespace Ater.MetaWeBlog.Models
 {
     public class PostInfo
     {
@@ -19,7 +19,7 @@ namespace MSDev.MetaWeblog.Models
             set;
         }
 
-        public System.DateTime? DateCreated
+        public DateTime? DateCreated
         {
             get;
             set;
@@ -63,17 +63,17 @@ namespace MSDev.MetaWeblog.Models
 
         public static void Serialize(PostInfo[] posts, string filename)
         {
-            var serializer = new System.Xml.Serialization.XmlSerializer(typeof(PostInfo[]));
-            var textWriter = new System.IO.StreamWriter(filename);
+            System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(PostInfo[]));
+            System.IO.StreamWriter textWriter = new System.IO.StreamWriter(filename);
             serializer.Serialize(textWriter, posts);
             textWriter.Close();
         }
 
         public static PostInfo[] Deserialize(string filename)
         {
-            var fp = System.IO.File.OpenText(filename);
-            var posts_serializer = new System.Xml.Serialization.XmlSerializer(typeof(PostInfo[]));
-            var loaded_posts = (PostInfo[])posts_serializer.Deserialize(fp);
+            System.IO.StreamReader fp = System.IO.File.OpenText(filename);
+            System.Xml.Serialization.XmlSerializer posts_serializer = new System.Xml.Serialization.XmlSerializer(typeof(PostInfo[]));
+            PostInfo[] loaded_posts = (PostInfo[])posts_serializer.Deserialize(fp);
             fp.Close();
             return loaded_posts;
         }

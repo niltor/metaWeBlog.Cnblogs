@@ -1,4 +1,4 @@
-namespace MSDev.MetaWeblog.XmlRPC
+namespace Ater.MetaWeBlog.XmlRPC
 {
     public class Fault
     {
@@ -8,21 +8,19 @@ namespace MSDev.MetaWeblog.XmlRPC
 
         public static Fault ParseXml(System.Xml.Linq.XElement fault_el)
         {
-            var value_el = fault_el.GetElement("value");
-            var fault_value = (Struct)XmlRPC.Value.ParseXml(value_el);
+            System.Xml.Linq.XElement value_el = fault_el.GetElement("value");
+            Struct fault_value = (Struct)XmlRPC.Value.ParseXml(value_el);
 
             int fault_code = -1;
-            var fault_code_val = fault_value.Get("faultCode");
+            Value fault_code_val = fault_value.Get("faultCode");
             if (fault_code_val != null)
             {
-                if (fault_code_val is StringValue)
+                if (fault_code_val is StringValue s)
                 {
-                    var s = (StringValue)fault_code_val;
                     fault_code = int.Parse(s.String);
                 }
-                else if (fault_code_val is IntegerValue)
+                else if (fault_code_val is IntegerValue i)
                 {
-                    var i = (IntegerValue)fault_code_val;
                     fault_code = i.Integer;
                 }
                 else
@@ -34,7 +32,7 @@ namespace MSDev.MetaWeblog.XmlRPC
 
             string fault_string = fault_value.Get<StringValue>("faultString").String;
 
-            var f = new Fault
+            Fault f = new Fault
             {
                 FaultCode = fault_code,
                 FaultString = fault_string,

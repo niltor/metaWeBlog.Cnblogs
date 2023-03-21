@@ -1,6 +1,6 @@
-using SXL=System.Xml.Linq;
+using SXL = System.Xml.Linq;
 
-namespace MSDev.MetaWeblog.XmlRPC
+namespace Ater.MetaWeBlog.XmlRPC
 {
     public class IntegerValue : Value
     {
@@ -8,60 +8,52 @@ namespace MSDev.MetaWeblog.XmlRPC
 
         public IntegerValue(int i)
         {
-            this.Integer = i;
+            Integer = i;
         }
 
-        public static string TypeString
-        {
-            get { return "int"; }
-        }
+        public static string TypeString => "int";
 
         protected override void AddToTypeEl(SXL.XElement parent)
         {
-            parent.Value = this.Integer.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            parent.Value = Integer.ToString(System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public static IntegerValue XmlToValue(SXL.XElement parent)
         {
-            var bv = new IntegerValue(int.Parse(parent.Value));
+            IntegerValue bv = new IntegerValue(int.Parse(parent.Value));
             return bv;
         }
 
-        public static string AlternateTypeString
-        {
-            get { return "i4"; }            
-        }
+        public static string AlternateTypeString => "i4";
 
         public static implicit operator IntegerValue(int v)
         {
             return new IntegerValue(v);
         }
 
-        public override bool Equals(System.Object obj)
+        public override bool Equals(object obj)
         {
             if (obj == null)
             {
                 return false;
             }
 
-            var p = obj as IntegerValue;
-            if (p == null)
+            if (!(obj is IntegerValue p))
             {
                 return false;
             }
 
-            // Return true if the fields match:
-            return (this.Integer== p.Integer);
+            return Integer == p.Integer;
         }
 
         public override int GetHashCode()
         {
-            return this.Integer.GetHashCode();
+            return Integer.GetHashCode();
         }
 
         protected override string GetTypeString()
         {
-            return IntegerValue.TypeString;
+            return TypeString;
         }
 
     }

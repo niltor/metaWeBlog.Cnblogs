@@ -1,6 +1,6 @@
-using SXL=System.Xml.Linq;
+using SXL = System.Xml.Linq;
 
-namespace MSDev.MetaWeblog.XmlRPC
+namespace Ater.MetaWeBlog.XmlRPC
 {
     public class DateTimeValue : Value
     {
@@ -8,34 +8,30 @@ namespace MSDev.MetaWeblog.XmlRPC
 
         public DateTimeValue(System.DateTime value)
         {
-            this.Data = value;
+            Data = value;
         }
 
-        public static string TypeString
-        {
-            get { return "dateTime.iso8601"; }
-        }
+        public static string TypeString => "dateTime.iso8601";
 
         protected override void AddToTypeEl(SXL.XElement parent)
         {
-            var s = this.Data.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
-            s = s.Replace("-","");
+            string s = Data.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            s = s.Replace("-", "");
             parent.Value = s;
         }
 
         public static DateTimeValue XmlToValue(SXL.XElement parent)
         {
-            System.DateTime dt = System.DateTime.Now;
-            if (System.DateTime.TryParse(parent.Value, out dt))
+            _ = System.DateTime.Now;
+            if (System.DateTime.TryParse(parent.Value, out System.DateTime dt))
             {
                 return new DateTimeValue(dt);
             }
 
-            /// TODO: what is Z for?
-            var date = parent.Value.Trim('Z');// remove Z from SharePoint date
+            string date = parent.Value.Trim('Z');// remove Z from SharePoint date
 
-            var x = System.DateTime.ParseExact(date, "yyyyMMddTHH:mm:ss", null);
-            var y = new DateTimeValue(x);
+            System.DateTime x = System.DateTime.ParseExact(date, "yyyyMMddTHH:mm:ss", null);
+            DateTimeValue y = new DateTimeValue(x);
             return y;
         }
 
@@ -44,32 +40,31 @@ namespace MSDev.MetaWeblog.XmlRPC
             return new DateTimeValue(v);
         }
 
-        public override bool Equals(System.Object obj)
+        public override bool Equals(object obj)
         {
             if (obj == null)
             {
                 return false;
             }
 
-            var p = obj as DateTimeValue;
-            if (p == null)
+            if (!(obj is DateTimeValue p))
             {
                 return false;
             }
 
             // Return true if the fields match:
-            return (this.Data.Day == p.Data.Day && this.Data.Month == p.Data.Month && this.Data.Year == p.Data.Year) &&
-                (this.Data.Hour == p.Data.Hour&& this.Data.Minute== p.Data.Minute&& this.Data.Second== p.Data.Second);
+            return Data.Day == p.Data.Day && Data.Month == p.Data.Month && Data.Year == p.Data.Year &&
+                Data.Hour == p.Data.Hour && Data.Minute == p.Data.Minute && Data.Second == p.Data.Second;
         }
 
         public override int GetHashCode()
         {
-            return this.Data.GetHashCode();
+            return Data.GetHashCode();
         }
 
         protected override string GetTypeString()
-        {           
-            return DateTimeValue.TypeString;
+        {
+            return TypeString;
         }
     }
 }

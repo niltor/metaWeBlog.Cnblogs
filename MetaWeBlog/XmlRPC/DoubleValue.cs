@@ -1,6 +1,6 @@
-using SXL=System.Xml.Linq;
+using SXL = System.Xml.Linq;
 
-namespace MSDev.MetaWeblog.XmlRPC
+namespace Ater.MetaWeBlog.XmlRPC
 {
     public class DoubleValue : Value
     {
@@ -8,22 +8,19 @@ namespace MSDev.MetaWeblog.XmlRPC
 
         public DoubleValue(double d)
         {
-            this.Double = d;
+            Double = d;
         }
 
-        public static string TypeString
-        {
-            get { return "double"; }
-        }
+        public static string TypeString => "double";
 
         protected override void AddToTypeEl(SXL.XElement parent)
         {
-            parent.Value = this.Double.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            parent.Value = Double.ToString(System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public static DoubleValue XmlToValue(SXL.XElement parent)
         {
-            var bv = new DoubleValue(double.Parse(parent.Value));
+            DoubleValue bv = new DoubleValue(double.Parse(parent.Value));
             return bv;
         }
 
@@ -32,31 +29,29 @@ namespace MSDev.MetaWeblog.XmlRPC
             return new DoubleValue(v);
         }
 
-        public override bool Equals(System.Object obj)
+        public override bool Equals(object obj)
         {
             if (obj == null)
             {
                 return false;
             }
 
-            var p = obj as DoubleValue;
-            if (p == null)
+            if (!(obj is DoubleValue p))
             {
                 return false;
             }
 
-            // Return true if the fields match:
-            return (this.Double == p.Double);
+            return Double == p.Double;
         }
 
         public override int GetHashCode()
         {
-            return this.Double.GetHashCode();
+            return Double.GetHashCode();
         }
 
         protected override string GetTypeString()
         {
-            return DoubleValue.TypeString;
+            return TypeString;
         }
     }
 }

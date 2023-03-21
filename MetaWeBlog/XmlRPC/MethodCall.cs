@@ -1,7 +1,6 @@
-using System.ComponentModel;
-using SXL=System.Xml.Linq;
+using SXL = System.Xml.Linq;
 
-namespace MSDev.MetaWeblog.XmlRPC
+namespace Ater.MetaWeBlog.XmlRPC
 {
     public class MethodCall
     {
@@ -10,31 +9,31 @@ namespace MSDev.MetaWeblog.XmlRPC
 
         public MethodCall(string name)
         {
-            this.Name = name;
-            this.Parameters = new ParameterList();
+            Name = name;
+            Parameters = new ParameterList();
         }
 
         public SXL.XDocument CreateDocument()
         {
-            var doc = new SXL.XDocument();
-            var root = new SXL.XElement("methodCall");
+            SXL.XDocument doc = new SXL.XDocument();
+            SXL.XElement root = new SXL.XElement("methodCall");
 
             doc.Add(root);
 
-            var method = new SXL.XElement("methodName");
+            SXL.XElement method = new SXL.XElement("methodName");
             root.Add(method);
 
-            method.Add(this.Name);
+            method.Add(Name);
 
-            var params_el = new SXL.XElement("params");
+            SXL.XElement params_el = new SXL.XElement("params");
             root.Add(params_el);
 
-            foreach (var p in this.Parameters)
+            foreach (Value p in Parameters)
             {
-                var param_el = new SXL.XElement("param");
+                SXL.XElement param_el = new SXL.XElement("param");
                 params_el.Add(param_el);
 
-                p.AddXmlElement(param_el);
+                _ = p.AddXmlElement(param_el);
             }
 
             return doc;

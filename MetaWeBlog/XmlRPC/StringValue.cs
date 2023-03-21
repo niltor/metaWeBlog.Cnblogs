@@ -1,6 +1,6 @@
-using SXL=System.Xml.Linq;
+using SXL = System.Xml.Linq;
 
-namespace MSDev.MetaWeblog.XmlRPC
+namespace Ater.MetaWeBlog.XmlRPC
 {
     public class StringValue : Value
     {
@@ -8,28 +8,25 @@ namespace MSDev.MetaWeblog.XmlRPC
 
         public StringValue(string s)
         {
-            this.String = s;
+            String = s;
         }
 
-        public static string TypeString
-        {
-            get { return "string"; }
-        }
+        public static string TypeString => "string";
 
         protected override void AddToTypeEl(SXL.XElement parent)
         {
-            parent.Value = this.String;
+            parent.Value = String;
         }
 
         public static StringValue XmlToValue(SXL.XElement parent)
         {
-            var bv = new StringValue(parent.Value);
+            StringValue bv = new StringValue(parent.Value);
             return bv;
         }
 
         public static implicit operator StringValue(string v)
         {
-            return new StringValue( v);
+            return new StringValue(v);
         }
 
         private static StringValue ns;
@@ -39,7 +36,7 @@ namespace MSDev.MetaWeblog.XmlRPC
         {
             get
             {
-                if (StringValue.ns == null)
+                if (ns == null)
                 {
                     ns = new StringValue(null);
                 }
@@ -51,7 +48,7 @@ namespace MSDev.MetaWeblog.XmlRPC
         {
             get
             {
-                if (StringValue.es == null)
+                if (es == null)
                 {
                     es = new StringValue(string.Empty);
                 }
@@ -61,7 +58,7 @@ namespace MSDev.MetaWeblog.XmlRPC
 
         protected override string GetTypeString()
         {
-            return StringValue.TypeString;
+            return TypeString;
         }
     }
 }

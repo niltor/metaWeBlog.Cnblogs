@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MSDev.MetaWeblog.Models;
-using MSDev.MetaWeblog.XmlRPC;
+using Ater.MetaWeBlog.Models;
+using Ater.MetaWeBlog.XmlRPC;
 
-namespace MSDev.MetaWeblog
+namespace Ater.MetaWeBlog
 {
     public class Client
     {
-        //http://xmlrpc.scripting.com/metaWeblogApi.html
-
         public string AppKey = "0123456789ABCDEF";
         public ClientOption clientOption;
 
@@ -20,9 +18,9 @@ namespace MSDev.MetaWeblog
 
         public List<PostInfo> GetRecentPosts(int numposts)
         {
-            var service = new Service(clientOption.MetaWeblogURL);
+            Service service = new Service(clientOption.MetaWeblogURL);
 
-            var method = new MethodCall("metaWeblog.getRecentPosts");
+            MethodCall method = new MethodCall("metaWeblog.getRecentPosts");
             method.Parameters.Add(clientOption.BlogID);
             method.Parameters.Add(clientOption.Username);
             method.Parameters.Add(clientOption.Password);
@@ -30,17 +28,17 @@ namespace MSDev.MetaWeblog
 
             service.Cookies = clientOption.Cookies;
 
-            var response = service.Execute(method);
+            MethodResponse response = service.Execute(method);
 
-            var param = response.Parameters[0];
-            var array = (XmlRPC.Array)param;
+            Value param = response.Parameters[0];
+            XmlRPC.Array array = (XmlRPC.Array)param;
 
-            var items = new List<PostInfo>();
-            foreach (var value in array)
+            List<PostInfo> items = new List<PostInfo>();
+            foreach (Value value in array)
             {
-                var struct_ = (Struct)value;
+                Struct struct_ = (Struct)value;
 
-                var postinfo = new PostInfo
+                PostInfo postinfo = new PostInfo
                 {
                     Title = struct_.Get("title", StringValue.NullString).String,
                     DateCreated = struct_.Get<DateTimeValue>("dateCreated").Data,
@@ -60,14 +58,14 @@ namespace MSDev.MetaWeblog
 
         public MediaObjectInfo NewMediaObject(string name, string type, byte[] bits)
         {
-            var service = new Service(clientOption.MetaWeblogURL);
+            Service service = new Service(clientOption.MetaWeblogURL);
 
-            var input_struct_ = new Struct();
+            Struct input_struct_ = new Struct();
             input_struct_["name"] = new StringValue(name);
             input_struct_["type"] = new StringValue(type);
             input_struct_["bits"] = new Base64Data(bits);
 
-            var method = new MethodCall("metaWeblog.newMediaObject");
+            MethodCall method = new MethodCall("metaWeblog.newMediaObject");
             method.Parameters.Add(clientOption.BlogID);
             method.Parameters.Add(clientOption.Username);
             method.Parameters.Add(clientOption.Password);
@@ -75,11 +73,11 @@ namespace MSDev.MetaWeblog
 
             service.Cookies = clientOption.Cookies;
 
-            var response = service.Execute(method);
-            var param = response.Parameters[0];
-            var struct_ = (Struct)param;
+            MethodResponse response = service.Execute(method);
+            Value param = response.Parameters[0];
+            Struct struct_ = (Struct)param;
 
-            var mediaobject = new MediaObjectInfo
+            MediaObjectInfo mediaobject = new MediaObjectInfo
             {
                 URL = struct_.Get("url", StringValue.NullString).String
             };
@@ -89,20 +87,20 @@ namespace MSDev.MetaWeblog
 
         public PostInfo GetPost(string postid)
         {
-            var service = new Service(clientOption.MetaWeblogURL);
+            Service service = new Service(clientOption.MetaWeblogURL);
 
-            var method = new MethodCall("metaWeblog.getPost");
-            method.Parameters.Add(postid); // notice this is the postid, not the blogid
+            MethodCall method = new MethodCall("metaWeblog.getPost");
+            method.Parameters.Add(postid);
             method.Parameters.Add(clientOption.Username);
             method.Parameters.Add(clientOption.Password);
 
             service.Cookies = clientOption.Cookies;
 
-            var response = service.Execute(method);
-            var param = response.Parameters[0];
-            var struct_ = (Struct)param;
+            MethodResponse response = service.Execute(method);
+            Value param = response.Parameters[0];
+            Struct struct_ = (Struct)param;
 
-            var postinfo = new PostInfo
+            PostInfo postinfo = new PostInfo
             {
                 //item.Categories 
                 PostID = struct_.Get<IntegerValue>("postid").ToString(),
@@ -116,17 +114,18 @@ namespace MSDev.MetaWeblog
                 UserID = struct_.Get("userid", StringValue.NullString).String
             };
 
-            var rawCats = struct_.Get<XmlRPC.Array>("categories");
+            XmlRPC.Array rawCats = struct_.Get<XmlRPC.Array>("categories");
 
             rawCats.ToList().ForEach(i =>
             {
                 if (i is StringValue)
                 {
-                    var cat = (i as StringValue).String;
+                    string cat = (i as StringValue).String;
 
                     if (cat != "" && !postinfo.Categories.Contains(cat))
+                    {
                         postinfo.Categories.Add(cat);
-
+                    }
                 }
             });
 
@@ -150,16 +149,16 @@ namespace MSDev.MetaWeblog
             {
                 cats = new XmlRPC.Array(categories.Count);
 
-                var ss = new List<Value>();
+                List<Value> ss = new List<Value>();
 
                 categories.Select(c => new StringValue(c)).ToList().ForEach(i => ss.Add(i));
 
                 cats.AddRange(ss);
             }
 
-            var service = new Service(clientOption.MetaWeblogURL);
+            Service service = new Service(clientOption.MetaWeblogURL);
 
-            var struct_ = new Struct();
+            Struct struct_ = new Struct();
             struct_["title"] = new StringValue(title);
             struct_["description"] = new StringValue(description);
             struct_["categories"] = cats;
@@ -169,7 +168,7 @@ namespace MSDev.MetaWeblog
                 struct_["date_created_gmt"] = new DateTimeValue(date_created.Value.ToUniversalTime());
 
             }
-            var method = new MethodCall("metaWeblog.newPost");
+            MethodCall method = new MethodCall("metaWeblog.newPost");
             method.Parameters.Add(clientOption.BlogID);
             method.Parameters.Add(clientOption.Username);
             method.Parameters.Add(clientOption.Password);
@@ -178,18 +177,18 @@ namespace MSDev.MetaWeblog
 
             service.Cookies = clientOption.Cookies;
 
-            var response = service.Execute(method);
-            var param = response.Parameters[0];
-            var postid = ((StringValue)param).String;
+            MethodResponse response = service.Execute(method);
+            Value param = response.Parameters[0];
+            string postid = ((StringValue)param).String;
 
             return postid;
         }
 
         public bool DeletePost(string postid)
         {
-            var service = new Service(clientOption.MetaWeblogURL);
+            Service service = new Service(clientOption.MetaWeblogURL);
 
-            var method = new MethodCall("blogger.deletePost");
+            MethodCall method = new MethodCall("blogger.deletePost");
             method.Parameters.Add(AppKey);
             method.Parameters.Add(postid);
             method.Parameters.Add(clientOption.Username);
@@ -198,36 +197,36 @@ namespace MSDev.MetaWeblog
 
             service.Cookies = clientOption.Cookies;
 
-            var response = service.Execute(method);
+            MethodResponse response = service.Execute(method);
 
-            var param = response.Parameters[0];
-            var success = (BooleanValue)param;
+            Value param = response.Parameters[0];
+            BooleanValue success = (BooleanValue)param;
 
             return success.Boolean;
         }
 
         public List<BlogInfo> GetUsersBlogs()
         {
-            var service = new Service(clientOption.MetaWeblogURL);
+            Service service = new Service(clientOption.MetaWeblogURL);
 
-            var method = new MethodCall("blogger.getUsersBlogs");
+            MethodCall method = new MethodCall("blogger.getUsersBlogs");
             method.Parameters.Add(AppKey);
             method.Parameters.Add(clientOption.Username);
             method.Parameters.Add(clientOption.Password);
 
             service.Cookies = clientOption.Cookies;
 
-            var response = service.Execute(method);
-            var list = (XmlRPC.Array)response.Parameters[0];
+            MethodResponse response = service.Execute(method);
+            XmlRPC.Array list = (XmlRPC.Array)response.Parameters[0];
 
             // 设置blogId
-            var blogs = new List<BlogInfo>(list.Count);
+            List<BlogInfo> blogs = new List<BlogInfo>(list.Count);
 
             for (int i = 0; i < list.Count; i++)
             {
-                var struct_ = (Struct)list[i];
+                Struct struct_ = (Struct)list[i];
 
-                var boginfo = new BlogInfo
+                BlogInfo boginfo = new BlogInfo
                 {
                     BlogID = struct_.Get("blogid", StringValue.NullString).String,
                     URL = struct_.Get("url", StringValue.NullString).String,
@@ -246,31 +245,29 @@ namespace MSDev.MetaWeblog
 
         public bool EditPost(string postid, string title, string description, IList<string> categories, bool publish)
         {
-
-            // Create an array to hold any categories
-            var categories_ = new XmlRPC.Array(categories == null ? 0 : categories.Count);
+            XmlRPC.Array categories_ = new XmlRPC.Array(categories == null ? 0 : categories.Count);
 
             if (categories != null)
             {
-                var sorted = categories.Distinct().ToList();
+                List<string> sorted = categories.Distinct().ToList();
 
                 sorted.Sort();
 
-                var ss = new List<Value>();
+                List<Value> ss = new List<Value>();
 
                 sorted.Select(c => new StringValue(c)).ToList().ForEach(i => ss.Add(i));
 
                 categories_.AddRange(ss);
             }
 
-            var service = new Service(clientOption.MetaWeblogURL);
-            var struct_ = new Struct();
+            Service service = new Service(clientOption.MetaWeblogURL);
+            Struct struct_ = new Struct();
 
             struct_["title"] = new StringValue(title);
             struct_["description"] = new StringValue(description);
             struct_["categories"] = categories_;
 
-            var method = new MethodCall("metaWeblog.editPost");
+            MethodCall method = new MethodCall("metaWeblog.editPost");
             method.Parameters.Add(postid);
             method.Parameters.Add(clientOption.Username);
             method.Parameters.Add(clientOption.Password);
@@ -279,33 +276,33 @@ namespace MSDev.MetaWeblog
 
             service.Cookies = clientOption.Cookies;
 
-            var response = service.Execute(method);
-            var param = response.Parameters[0];
-            var success = (BooleanValue)param;
+            MethodResponse response = service.Execute(method);
+            Value param = response.Parameters[0];
+            BooleanValue success = (BooleanValue)param;
 
             return success.Boolean;
         }
 
         public List<CategoryInfo> GetCategories()
         {
-            var service = new Service(clientOption.MetaWeblogURL);
+            Service service = new Service(clientOption.MetaWeblogURL);
 
-            var method = new MethodCall("metaWeblog.getCategories");
+            MethodCall method = new MethodCall("metaWeblog.getCategories");
             method.Parameters.Add(clientOption.BlogID);
             method.Parameters.Add(clientOption.Username);
             method.Parameters.Add(clientOption.Password);
             service.Cookies = clientOption.Cookies;
-            var response = service.Execute(method);
+            MethodResponse response = service.Execute(method);
 
-            var param = response.Parameters[0];
-            var array = (XmlRPC.Array)param;
+            Value param = response.Parameters[0];
+            XmlRPC.Array array = (XmlRPC.Array)param;
 
-            var items = new List<CategoryInfo>();
-            foreach (var value in array)
+            List<CategoryInfo> items = new List<CategoryInfo>();
+            foreach (Value value in array)
             {
-                var struct_ = (Struct)value;
+                Struct struct_ = (Struct)value;
 
-                var catinfo = new CategoryInfo
+                CategoryInfo catinfo = new CategoryInfo
                 {
                     Title = struct_.Get("title", StringValue.NullString).String,
                     Description = struct_.Get("description", StringValue.NullString).String,
@@ -321,19 +318,19 @@ namespace MSDev.MetaWeblog
 
         public UserInfo GetUserInfo()
         {
-            var service = new Service(clientOption.MetaWeblogURL);
+            Service service = new Service(clientOption.MetaWeblogURL);
 
-            var method = new MethodCall("blogger.getUserInfo");
+            MethodCall method = new MethodCall("blogger.getUserInfo");
             method.Parameters.Add(AppKey);
             method.Parameters.Add(clientOption.Username);
             method.Parameters.Add(clientOption.Password);
 
             service.Cookies = clientOption.Cookies;
 
-            var response = service.Execute(method);
-            var param = response.Parameters[0];
-            var struct_ = (Struct)param;
-            var item = new UserInfo
+            MethodResponse response = service.Execute(method);
+            Value param = response.Parameters[0];
+            Struct struct_ = (Struct)param;
+            UserInfo item = new UserInfo
             {
                 UserID = struct_.Get("userid", StringValue.NullString).String,
                 Nickname = struct_.Get("nickname", StringValue.NullString).String,

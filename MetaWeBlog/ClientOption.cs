@@ -1,5 +1,6 @@
 using System.Net;
-namespace MSDev.MetaWeblog
+
+namespace Ater.MetaWeBlog
 {
     public class ClientOption
     {
@@ -11,22 +12,22 @@ namespace MSDev.MetaWeblog
 
         public static ClientOption Load(string filename)
         {
-            var doc = System.Xml.Linq.XDocument.Load(filename);
-            var root = doc.Root;
+            System.Xml.Linq.XDocument doc = System.Xml.Linq.XDocument.Load(filename);
+            System.Xml.Linq.XElement root = doc.Root;
 
             string blogurl = root.GetElementString("blogurl");
             string blogId = root.GetElementString("blogid");
             string metaWeblogUrl = root.GetElementString("metaweblog_url");
             string username = root.GetElementString("username");
             string password = root.GetElementString("password");
-            var coninfo = new ClientOption(blogurl, metaWeblogUrl, blogId, username, password);
+            ClientOption coninfo = new ClientOption(blogurl, metaWeblogUrl, blogId, username, password);
             return coninfo;
         }
 
         public void Save(string filename)
         {
-            var doc = new System.Xml.Linq.XDocument();
-            var p = new System.Xml.Linq.XElement("blogconnectioninfo");
+            System.Xml.Linq.XDocument doc = new System.Xml.Linq.XDocument();
+            System.Xml.Linq.XElement p = new System.Xml.Linq.XElement("blogconnectioninfo");
             doc.Add(p);
             p.Add(new System.Xml.Linq.XElement("blogurl", BlogURL));
             p.Add(new System.Xml.Linq.XElement("blogid", BlogID));
@@ -35,7 +36,7 @@ namespace MSDev.MetaWeblog
             p.Add(new System.Xml.Linq.XElement("password", Password));
             doc.Save(filename);
         }
-        
+
         public CookieContainer Cookies = null;
 
         public ClientOption(string blogurl, string metaweblogurl, string blogid, string username, string password)

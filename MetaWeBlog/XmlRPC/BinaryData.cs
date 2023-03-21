@@ -1,7 +1,7 @@
 using System;
-using SXL=System.Xml.Linq;
+using SXL = System.Xml.Linq;
 
-namespace MSDev.MetaWeblog.XmlRPC
+namespace Ater.MetaWeBlog.XmlRPC
 {
     public class Base64Data : Value
     {
@@ -9,17 +9,10 @@ namespace MSDev.MetaWeblog.XmlRPC
 
         public Base64Data(byte[] bytes)
         {
-            if (bytes == null)
-            {
-                throw new ArgumentNullException("bytes");
-            }
-            this.Bytes = bytes;
+            Bytes = bytes ?? throw new ArgumentNullException("bytes");
         }
 
-        public static string TypeString
-        {
-            get { return "base64"; }
-        }
+        public static string TypeString => "base64";
 
         protected override void AddToTypeEl(SXL.XElement parent)
         {
@@ -28,45 +21,43 @@ namespace MSDev.MetaWeblog.XmlRPC
 
         internal static Base64Data XmlToValue(SXL.XElement type_el)
         {
-            var bytes = Convert.FromBase64String(type_el.Value);
-            var b = new Base64Data(bytes);
+            byte[] bytes = Convert.FromBase64String(type_el.Value);
+            Base64Data b = new Base64Data(bytes);
             return b;
         }
 
-        public static implicit operator Base64Data(byte [] v)
+        public static implicit operator Base64Data(byte[] v)
         {
             return new Base64Data(v);
         }
 
-        public override bool Equals(System.Object obj)
+        public override bool Equals(object obj)
         {
             if (obj == null)
             {
                 return false;
             }
 
-            var p = obj as Base64Data;
-            if (p == null)
+            if (!(obj is Base64Data p))
             {
                 return false;
             }
 
-            // Return true if the fields match:
-            if (this.Bytes != p.Bytes)
+            if (Bytes != p.Bytes)
             {
-                if (this.Bytes.Length != p.Bytes.Length)
+                if (Bytes.Length != p.Bytes.Length)
                 {
                     return false;
                 }
 
-                for (int i = 0; i < this.Bytes.Length; i++)
+                for (int i = 0; i < Bytes.Length; i++)
                 {
-                    if (this.Bytes[i] != p.Bytes[i])
+                    if (Bytes[i] != p.Bytes[i])
                     {
                         return false;
                     }
-                } 
-                
+                }
+
                 return true;
             }
             return true;
@@ -74,12 +65,12 @@ namespace MSDev.MetaWeblog.XmlRPC
 
         protected override string GetTypeString()
         {
-            return Base64Data.TypeString;
+            return TypeString;
         }
 
         public override int GetHashCode()
         {
-            return this.Bytes.GetHashCode();
+            return Bytes.GetHashCode();
         }
     }
 }
