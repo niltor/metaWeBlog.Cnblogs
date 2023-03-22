@@ -231,7 +231,6 @@ namespace Ater.MetaWeBlog
                     BlogID = struct_.Get("blogid", StringValue.NullString).String,
                     URL = struct_.Get("url", StringValue.NullString).String,
                     BlogName = struct_.Get("blogName", StringValue.NullString).String,
-                    IsAdmin = struct_.Get<BooleanValue>("isAdmin", false).Boolean,
                     SiteName = struct_.Get("siteName", StringValue.NullString).String,
                     Capabilities = struct_.Get("capabilities", StringValue.NullString).String,
                     XmlRPCEndPoint = struct_.Get("xmlrpc", StringValue.NullString).String

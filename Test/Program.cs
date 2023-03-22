@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ater.MetaWeblog.Options;
 using Ater.MetaWeBlog;
 using Ater.MetaWeBlog.Models;
 using Ater.MetaWeBlog.Options;
@@ -11,6 +12,9 @@ namespace Test
     {
         static void Main(string[] args)
         {
+
+            TestOsChina();
+
             // 使用cnblogs
             var option = new CnBlogsOption("", "", "");
             // 使用完整url
@@ -29,6 +33,20 @@ namespace Test
             Console.WriteLine(result);
 
             Console.ReadLine();
+        }
+
+
+        static void TestOsChina()
+        {
+            var option = new OsChinaOption("", "17076007855", "54NilTor");
+            var client = new Client(option);
+            var blogs = client.GetUsersBlogs();
+
+
+            var categories = client.GetCategories();
+            var addToCategories = new List<string> { "12508039","工作日志" };
+            var result = client.NewPost("仅测试", "测试", addToCategories, DateTime.Now, true);
+            Console.WriteLine(  );
         }
     }
 }

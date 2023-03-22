@@ -59,7 +59,6 @@ namespace Ater.MetaWeBlog.XmlRPC
             }
 
             checktype<T>(v);
-
             return (T)v;
         }
 
