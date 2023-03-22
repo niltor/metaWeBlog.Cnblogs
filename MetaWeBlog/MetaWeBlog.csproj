@@ -12,7 +12,7 @@
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>metaweblog,cnblogs,C#,.NET</PackageTags>
 		<PackageReleaseNotes>MetaWeblog for .NET</PackageReleaseNotes>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<Title>MetaWeblog </Title>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
